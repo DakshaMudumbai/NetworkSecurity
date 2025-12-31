@@ -1,3 +1,8 @@
 python-dotenv
 pandas
 numpy
+pymongo
+certifi
+    
+## -e. When u trying to deployed full as a 
+## package when deploying on cloud 
