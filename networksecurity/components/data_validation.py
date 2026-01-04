@@ -29,7 +29,7 @@ class DataValidation:
 
     def validate_number_of_columns(self, dataframe:pd.DataFrame)->bool:
         try:
-            number_of_columns = len(self.schema_config['columns'])
+            number_of_columns = len(self.schema_config)
             logging.info(f"Required number of columns: {number_of_columns}")
             logging.info(f"Dataframe has columns: {len(dataframe.columns)}")
 
@@ -47,16 +47,13 @@ class DataValidation:
                 d1 = base_df[column]
                 d2 = current_df[column]
                 is_sample_dist = ks_2samp(d1,d2)
-                if threshold <= is_sample_dist.pvalue:
-                    is_found = False    
-                else:
-                    is_found = True
-                    status = False
+                is_found = is_sample_dist.pvalue < threshold
+                if is_found:
+                    status = False 
                 report.update({column:{
                     "pvalue":float(is_sample_dist.pvalue),
                     "drift_status":is_found
                 }})
-                    
             drift_report_file_path = self.data_validation_config.drift_report_file_path
 
             # Create Directory 
@@ -79,10 +76,10 @@ class DataValidation:
 
             status = self.validate_number_of_columns(dataframe=train_dataframe)
             if not status:
-                error_message = f"{error_message} Train dataframe does not contain all columns. \n"
+                error_message = (f"Train dataframe does not contain all columns. \n")
             status = self.validate_number_of_columns(dataframe=test_dataframe)
             if not status:
-                error_message = f"{error_message} Test dataframe does not contain all columns. \n"
+                error_message = (f"Test dataframe does not contain all columns. \n")
 
             ## lets check data drift
             status = self.detect_dataset_drift(base_df=train_dataframe,current_df=test_dataframe)
@@ -106,7 +103,7 @@ class DataValidation:
                 invalid_test_file_path = None,
                 drift_report_file_path = self.data_validation_config.drift_report_file_path
             )
-
+        
             return data_validation_artifact
         except Exception as e:
             raise NetworkSecurityException(e, sys)
