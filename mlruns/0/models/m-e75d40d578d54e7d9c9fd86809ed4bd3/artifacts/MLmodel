@@ -1,0 +1,22 @@
+artifact_path: /Users/ambanibob/Desktop/NetworkSecurity /mlruns/0/models/m-e75d40d578d54e7d9c9fd86809ed4bd3/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.10.19
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.2
+mlflow_version: 3.8.1
+model_id: m-e75d40d578d54e7d9c9fd86809ed4bd3
+model_size_bytes: 13465153
+model_uuid: m-e75d40d578d54e7d9c9fd86809ed4bd3
+prompts: null
+run_id: 80b1777124d94d7eb77575adacb698f4
+utc_time_created: '2026-01-08 00:47:27.014211'

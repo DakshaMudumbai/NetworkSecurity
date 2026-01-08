@@ -11,7 +11,7 @@ from networksecurity.entity.artifiact_entity import DataTransformationArtifact, 
 from networksecurity.entity.config_entity import DataTransformationConfig
 from networksecurity.exception.exception import NetworkSecurityException
 from networksecurity.logging.logger import logging
-from networksecurity.utils.main_utils.utils import save_numpy_array_data, save_object
+from networksecurity.utils.main_utils.utils import save_numpy_array_data, save_object 
 
 class DataTransformation:
     def __init__(self, data_validation_artifact:DataValidationArtifact,
@@ -72,7 +72,7 @@ class DataTransformation:
 
             preprocessor_object = preprocessor.fit(input_feature_train_df)
             transformed_input_train_feature = preprocessor_object.transform(input_feature_train_df)
-            transformed_input_test_feature = preprocessor_object.transform  (input_feature_test_df)
+            transformed_input_test_feature = preprocessor_object.transform(input_feature_test_df)
 
             train_arr = np.c_[transformed_input_train_feature, np.array(target_feature_train_df)]
             test_arr = np.c_[transformed_input_test_feature, np.array(target_feature_test_df)]
@@ -90,6 +90,7 @@ class DataTransformation:
                 transformed_test_file_path= self.data_transformation_config.transformed_test_file_path
             )
 
+            return data_transformation_artifact
 
         except Exception as e:
             raise NetworkSecurityException(e, sys)
