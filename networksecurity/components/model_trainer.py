@@ -22,6 +22,12 @@ from sklearn.ensemble import(
 )
 import mlflow
 
+import dagshub
+dagshub.init(repo_owner='DakshaMudumbai', repo_name='NetworkSecurity', mlflow=True)
+
+
+
+
 class ModelTrainer:
     def __init__(self, model_trainer_config: ModelTrainerConfig, data_transformation_artifact: DataTransformationArtifact):
         try:
@@ -40,6 +46,7 @@ class ModelTrainer:
             mlflow.log_metric("precision_score", precision_score)
             mlflow.log_metric("recall_score", recall_score)
             mlflow.sklearn.log_model(best_model, "model")
+            mlflow.log_artifact("final_model/model.pkl", artifact_path="model_pickle")
 
 
         
@@ -140,4 +147,3 @@ class ModelTrainer:
         
         except Exception as e:
             raise NetworkSecurityException(e,sys)
-

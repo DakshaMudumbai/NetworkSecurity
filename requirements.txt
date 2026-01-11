@@ -7,7 +7,10 @@ pymongo[srv]==4.15.5
 scikit-learn
 mlflow
 pyaml 
-
+dagshub
+fastapi
+uvicorn
+python-multipart
     
 ## -e. When u trying to deployed full as a 
 ## package when deploying on cloud 
