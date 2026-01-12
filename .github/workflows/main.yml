@@ -80,19 +80,9 @@ jobs:
               id: login-ecr
               uses: aws-actions/amazon-ecr-login@v2
 
-            - name: Debug ECR values
-              run: |
-                echo "ECR URI length: ${#ECR_URI}"
-                echo "Repo name length: ${#REPO_NAME}"
-                echo "Repo name: $REPO_NAME"
-                aws ecr describe-repositories --region ${{ secrets.AWS_REGION }} || echo "Failed to list repos"
-              env:
-                ECR_URI: ${{ secrets.AWS_ECR_LOGIN_URI }}
-                REPO_NAME: ${{ secrets.ECR_REPOSITORY_NAME }}
-
             - name: Pull latest images
               run: |
-                docker pull ${{ secrets.AWS_ECR_LOGIN_URI }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+                docker pull ${{ steps.login-ecr.outputs.registry }}/dakshanetworksecurity:latest
 
             # - name: Stop and remove container if running
             # run: |
