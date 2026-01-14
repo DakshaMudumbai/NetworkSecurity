@@ -47,8 +47,8 @@ from fastapi.templating import Jinja2Templates
 templates = Jinja2Templates(directory = "./templates")
 
 @app.get("/", tags = ["authentication"])
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+async def index():
+    return RedirectResponse(url="/docs")
 
 @app.get("/train")
 async def train_route():
