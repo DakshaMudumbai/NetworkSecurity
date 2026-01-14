@@ -6,9 +6,7 @@ ca = certifi.where()
 from dotenv import load_dotenv
 load_dotenv()
 mongo_db_url = os.getenv("MONGO_DB_URL")
-if not mongo_db_url:
-    mongo_db_url = os.getenv("MONGODB_URL_KEY")
-print(f"MongoDB URL loaded: {'Found' if mongo_db_url else 'Not Found'}")
+print(mongo_db_url)
 
 import pymongo
 from networksecurity.exception.exception import NetworkSecurityException
@@ -26,7 +24,7 @@ from networksecurity.utils.main_utils.utils import load_object
 
 from networksecurity.utils.ml_utils.model.estimator import NetworkModel
 
-client = pymongo.MongoClient(mongo_db_url, tlsCAFile=ca)
+client = pymongo.MongoClient(mongo_db_url, tlsCAFile=ca, tlsAllowInvalidCertificates=True)
 
 from networksecurity.constants.training_pipeline import DATA_INGESTION_COLLECTION_NAME, DATA_INGESTION_DATABASE_NAME
 

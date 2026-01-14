@@ -6,9 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 MONGO_DB_URL=os.getenv("MONGO_DB_URL")
-if not MONGO_DB_URL:
-    MONGO_DB_URL = os.getenv("MONGO_DB_URL_KEY")
-print(f"MONGO_DB_URL loaded: {'Found' if MONGO_DB_URL else 'Not Found'}")
+print(f"MONGO_DB_URL: {MONGO_DB_URL}")
 
 import certifi
 
@@ -42,7 +40,7 @@ class NetworkDataExtract():
             self.collection=collection
             self.records=records
 
-            self.mongo_client=pymongo.MongoClient(MONGO_DB_URL)
+            self.mongo_client=pymongo.MongoClient(MONGO_DB_URL, tlsCAFile=ca, tlsAllowInvalidCertificates=True)
 
             self.database = self.mongo_client[self.database]
             self.collection = self.database[self.collection]
