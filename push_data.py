@@ -6,7 +6,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 MONGO_DB_URL=os.getenv("MONGO_DB_URL")
-print(f"MONGO_DB_URL: {MONGO_DB_URL}")
+if not MONGO_DB_URL:
+    MONGO_DB_URL = os.getenv("MONGO_DB_URL_KEY")
+print(f"MONGO_DB_URL loaded: {'Found' if MONGO_DB_URL else 'Not Found'}")
 
 import certifi
 

@@ -6,7 +6,9 @@ ca = certifi.where()
 from dotenv import load_dotenv
 load_dotenv()
 mongo_db_url = os.getenv("MONGO_DB_URL")
-print(mongo_db_url)
+if not mongo_db_url:
+    mongo_db_url = os.getenv("MONGODB_URL_KEY")
+print(f"MongoDB URL loaded: {'Found' if mongo_db_url else 'Not Found'}")
 
 import pymongo
 from networksecurity.exception.exception import NetworkSecurityException
