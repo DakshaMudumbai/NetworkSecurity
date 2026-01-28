@@ -68,7 +68,9 @@ async def predict_route(request:Request, file: UploadFile = File(...)):
         final_model = load_object("final_model/model.pkl")
         network_model = NetworkModel(preprocesor, final_model)
         print(df.iloc[0])
-        y_pred = network_model.predict(df)
+        # Drop 'Result' column if it exists as it was not present during training
+        X = df.drop(columns=['Result'], errors='ignore')
+        y_pred = network_model.predict(X)
         print(y_pred)
         df['predicted_column'] = y_pred
         print(df['predicted_column'])

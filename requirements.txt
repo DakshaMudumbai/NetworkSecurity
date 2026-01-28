@@ -6,11 +6,12 @@ certifi
 pymongo[srv]==4.15.5
 scikit-learn
 mlflow
-pyaml 
+PyYAML 
 dagshub
 fastapi
 uvicorn
 python-multipart
+pyyaml
     
 ## -e. When u trying to deployed full as a 
 ## package when deploying on cloud 
