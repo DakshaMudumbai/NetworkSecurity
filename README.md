@@ -1,97 +1,123 @@
 # 🛡️ Network Security Mechanism
 
-## 📋 Overview
+A machine learning system for detecting phishing URLs using features extracted from URL structure, domain properties, and web page characteristics. Built on the UCI Phishing Websites Dataset, the model analyzes 30 attributes including URL length, use of IP addresses, SSL state, domain registration length, and page rank to classify websites as legitimate or malicious.
+This project implements an end-to-end MLOps pipeline covering data ingestion, validation, transformation, model training, and evaluation. The trained model is served via a FastAPI application deployed on AWS EC2, with full experiment tracking through MLflow and DagsHub.
 
-The **Network Security Mechanism** is a robust Machine Learning project designed to detect and classify network security threats. It leverages advanced data processing data pipelines and machine learning algorithms to identify anomalies and potential attacks in network traffic.
 
-This application is built as a complete end-to-end MLOps solution, featuring a training pipeline for model updates and a prediction pipeline served via a fast and efficient API.
+## 🌐 Live Demo
 
-## 🚀 Key Features
+**Try it now:** [http://54.167.110.229:8080/docs](http://54.167.110.229:8080/docs)
 
-- **🛡️ Threat Detection**: Classifies network traffic as benign or malicious/anomalous using a trained machine learning model.
-- **🔄 End-to-End Training Pipeline**: Automated pipeline for data ingestion, validation, transformation, model training, and evaluation.
-- **⚡ Fast API Serving**: API endpoints built with **FastAPI** for real-time inference and training triggers.
-- **📊 MLOps Integration**: Uses **MLflow** and **DagsHub** for experiment tracking, model registry, and versioning.
-- **🐳 Containerized**: Fully Dockerized application for consistent deployment across environments.
-- **☁️ Cloud Ready**: Deployed using AWS services (ECR, EC2) with a CI/CD pipeline via GitHub Actions.
+The API is deployed on AWS EC2 and provides two main functions:
 
-## 🛠️ Tech Stack
+| Endpoint | What it does |
+|----------|--------------|
+| `GET /train` | Triggers the full training pipeline. Model metrics are automatically logged to MLflow. |
+| `POST /predict` | Upload a CSV file and receive phishing predictions for each URL. |
 
-### Core
+### How to Test Predictions
 
-- **Language**: Python 3.10+
-- **Framework**: FastAPI
-- **Data Manipulation**: Pandas, NumPy
-- **Machine Learning**: Scikit-learn
-- **Database**: MongoDB (Atlas)
+1. Download the sample file: [`valid_data/test.csv`](valid_data/test.csv)
+2. Open the [Swagger UI](http://54.167.110.229:8080/docs) and expand the `/predict` endpoint
+3. Click **Try it out** → **Choose File** → Upload the CSV → **Execute**
+4. The response displays an HTML table with your original data plus a `predicted_column`:
+   - `1.0` → Phishing / Malicious
+   - `0.0` → Legitimate
 
-### MLOps & Infrastructure
+> **Note:** The EC2 instance may be stopped occasionally to manage AWS costs. If unavailable, check back later or run locally using the instructions below.
 
-- **Experiment Tracking**: MLflow, DagsHub
-- **Containerization**: Docker
-- **CI/CD**: GitHub Actions
-- **Cloud Provider**: AWS (ECR, EC2/Runner)
+---
+
+## 📊 Experiment Tracking
+
+All training runs are tracked using **MLflow** hosted on **DagsHub**, providing full visibility into model performance and versioning.
+
+**🔗 View Experiments:** [https://dagshub.com/DakshaMudumbai/NetworkSecurity.mlflow](https://dagshub.com/DakshaMudumbai/NetworkSecurity.mlflow)
+
+### Model Performance
+
+The current model achieves strong performance across key classification metrics:
+
+| Metric | Score |
+|--------|-------|
+| F1-Score | 97.7% |
+| Precision | 97.1% |
+| Recall | 98.4% |
+
+### Experiment Runs
+
+Over 64 training runs were conducted during development. Each run logs metrics, parameters, and model artifacts automatically.
+
+![MLflow Runs](assets/mlflow_runs.png)
+
+### Metrics Comparison
+
+Visual comparison of F1, Precision, and Recall across training iterations:
+
+![MLflow Experiments](assets/mlflow_experiments.png)
+
+### Run Details
+
+Each experiment captures detailed metrics and model artifacts for reproducibility:
+
+![MLflow Metrics](assets/mlflow_metrics.png)
+
+---
+
+## 🔧 Tech Stack
+
+**Core:** Python 3.10+, FastAPI, Scikit-learn, Pandas, NumPy, MongoDB Atlas
+
+**MLOps & Infrastructure:** MLflow, DagsHub, Docker, GitHub Actions, AWS (ECR, EC2)
+
+---
 
 ## 📂 Project Structure
 
 ```
 NetworkSecurity/
-├── networksecurity/        # Main package
-│   ├── components/         # Pipeline components (Ingestion, Validation, etc.)
-│   ├── pipeline/           # Training and Prediction pipelines
-│   ├── entity/             # Data classes and configuration entities
-│   ├── constants/          # Project constants
-│   ├── utils/              # Utility functions
-│   └── exception/          # Custom exception handling
-├── .github/workflows/      # CI/CD Workflows
-├── app.py                  # API Entry point
-├── requirements.txt        # Dependencies
-├── Dockerfile              # Docker configuration
-└── README.md               # Project documentation
+├── networksecurity/          # Main package
+│   ├── components/           # Pipeline stages (ingestion, validation, transformation, training)
+│   ├── pipeline/             # Training and prediction pipelines
+│   ├── entity/               # Configuration and data classes
+│   ├── constants/            # Project-wide constants
+│   ├── utils/                # Helper functions
+│   └── exception/            # Custom exception handling
+├── assets/                   # MLflow screenshots for documentation
+├── valid_data/               # Sample test data
+├── .github/workflows/        # CI/CD pipeline definitions
+├── app.py                    # FastAPI application entry point
+├── Dockerfile                # Container configuration
+├── requirements.txt          # Python dependencies
+└── README.md
 ```
 
-## 🔌 API Endpoints
+---
 
-The application provides the following endpoints:
-
-| Method | Endpoint   | Description                                                            |
-| :----- | :--------- | :--------------------------------------------------------------------- |
-| `GET`  | `/`        | Redirects to Swagger UI documentation.                                 |
-| `GET`  | `/train`   | Triggers the Machine Learning Training Pipeline.                       |
-| `POST` | `/predict` | Upload a CSV file to get predictions (returns HTML table & saves CSV). |
-| `GET`  | `/docs`    | Interactive API documentation (Swagger UI).                            |
-
-## ⚙️ Installation & Local Setup
+## ⚙️ Local Setup
 
 ### Prerequisites
 
 - Python 3.8+
-- MongoDB URL
-- AWS Credentials (optional, for cloud features)
+- MongoDB connection string
+- AWS credentials (optional, for cloud features)
+- DagsHub token (optional, for experiment tracking)
 
-### 1. Clone the Repository
+### Installation
+
+Clone the repository and set up your environment:
 
 ```bash
 git clone https://github.com/DakshaMudumbai/NetworkSecurity.git
 cd NetworkSecurity
-```
 
-### 2. Create a Virtual Environment
-
-```bash
 conda create -n networksecurity python=3.10 -y
 conda activate networksecurity
-```
 
-### 3. Install Dependencies
-
-```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configuration
-
-Create a `.env` file in the root directory and add your environment variables:
+Create a `.env` file in the root directory:
 
 ```env
 MONGO_DB_URL="your_mongodb_connection_string"
@@ -101,47 +127,51 @@ AWS_REGION="us-east-1"
 DAGSHUB_TOKEN="your_dagshub_token"
 ```
 
-### 5. Run the Application
+Run the application:
 
 ```bash
 python app.py
 ```
 
-Access the API at `http://localhost:8000/docs`.
+The API will be available at `http://localhost:8000/docs`.
 
-## 🐳 Docker Usage
+---
 
-Build and run the container locally:
+## 🐳 Docker
+
+Build and run locally:
 
 ```bash
-# Build the image
 docker build -t networksecurity .
-
-# Run the container
 docker run -p 8080:8000 --env-file .env networksecurity
 ```
 
+---
+
 ## 🔄 CI/CD Pipeline
 
-The project implements a continuous integration and deployment pipeline using GitHub Actions:
+The project uses GitHub Actions for automated deployment:
 
-1. **Continuous Integration**:
-   - Triggers on push to `main`.
-   - Lints code and runs unit tests.
+**Continuous Integration** — On push to `main`, the pipeline runs linting and tests.
 
-2. **Continuous Delivery**:
-   - Builds the Docker image.
-   - Pushes the image to **AWS Elastic Container Registry (ECR)**.
+**Continuous Delivery** — Builds a Docker image and pushes it to AWS Elastic Container Registry.
 
-3. **Continuous Deployment**:
-   - Pulls the latest image from ECR on a self-hosted runner or EC2 instance.
-   - Stops and removes the previous container.
-   - Runs the new container with updated code.
+**Continuous Deployment** — Pulls the latest image on the EC2 instance, stops the previous container, and deploys the updated version.
+
+---
 
 ## 🤝 Contributing
 
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request.
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -m 'Add your feature'`)
+4. Push to the branch (`git push origin feature/your-feature`)
+5. Open a Pull Request
+
+---
+
+## 📬 Contact
+
+**Daksha Mudumbai**
+
+[LinkedIn](https://linkedin.com/in/daksha-mudumbai/) · mudumbaid@gmail.com
