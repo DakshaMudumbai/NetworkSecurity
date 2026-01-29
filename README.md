@@ -4,7 +4,16 @@ A machine learning system for detecting phishing URLs using features extracted f
 This project implements an end-to-end MLOps pipeline covering data ingestion, validation, transformation, model training, and evaluation. The trained model is served via a FastAPI application deployed on AWS EC2, with full experiment tracking through MLflow and DagsHub.
 
 
-## 🌐 Live Demo
+## 🔗 Quick Links
+
+| Resource | Link |
+|----------|------|
+| **Live API** | [http://54.167.110.229:8080/docs](http://54.167.110.229:8080/docs) |
+| **Experiment Tracking** | [DagsHub MLflow](https://dagshub.com/DakshaMudumbai/NetworkSecurity.mlflow) |
+
+> **Try both:** Use the Live API to test phishing predictions, then check Experiment Tracking to see the 64+ training runs and model metrics behind it.
+
+## 🌐 Demo
 
 **Try it now:** [http://54.167.110.229:8080/docs](http://54.167.110.229:8080/docs)
 
